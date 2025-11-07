@@ -19,7 +19,7 @@ def GUI():
     """Main function to initialize the rest"""
     root = tk.Tk()
     root.configure(bg=LILAC)
-    root.title("Dynasty Warriors 4 Hyper BNS Unpacker")
+    root.title("Dynasty Warriors 4 Hyper BNS tool")
     root.minsize(1000, 700)
     root.resizable(False, False)
 

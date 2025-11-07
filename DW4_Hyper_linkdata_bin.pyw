@@ -27,7 +27,7 @@ LILAC = "#C8A2C8"
 def GUI():
     root = tk.Tk()
     root.configure(bg=LILAC)
-    root.title("Dynasty Warriors 4 Hyper Unpacker")
+    root.title("Dynasty Warriors 4 Hyper linkdata_bin tool")
     root.minsize(1000, 700)
     root.resizable(False, False)
 
@@ -62,9 +62,14 @@ def gui_stuff(root):
         text="To unpack the files, click the Unpack button and ensure the needed files are in the same directory."
     ).place(x=60, y=50)
 
+    lilac_label(
+        root,
+        text=f"To repack a PD2 file, click the repack button."
+    ).place(x=60, y=250)
+
     # Status label
     status_label = lilac_label(root, text="", fg="green")
-    status_label.place(x=60, y=200)
+    status_label.place(x=60, y=500)
 
     return status_label
 

@@ -17,7 +17,7 @@ LILAC = "#C8A2C8"
 def GUI():
     root = tk.Tk()
     root.configure(bg=LILAC)
-    root.title("Dynasty Warriors 4 Hyper resource_bin Unpacker")
+    root.title("Dynasty Warriors 4 Hyper resource_bin tool")
     root.minsize(1000, 700)
     root.resizable(False, False)
 
