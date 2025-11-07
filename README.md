@@ -1,4 +1,4 @@
-Lightweight, GUI-first modding tools for Dynasty Warriors 4 Hyper. Currently there are unpackers, repackers, a mod creator, mod manager to manage/apply mods. It's written in pure Python/Tkinter with minimal dependencies. Designed to be friendly for both modders and curious players. It's important to read the guide section and Extra info & tips. If you encounter any issues or have questions, let me know on here or reddit (username on reddit is ThatFlowerGamu).
+Lightweight, GUI-first modding tools for Dynasty Warriors 4 Hyper. Currently there are unpackers, repackers, a mod creator, mod manager to manage/apply mods. It's written in pure Python/Tkinter with minimal dependencies. Designed to be friendly for both modders and curious players. Mods can be any size, tools handle dynamic sizes (no “original size” constraint). It's important to read the guide section and Extra info & tips. If you encounter any issues or have questions, let me know on here or reddit (username on reddit is ThatFlowerGamu).
 
 Tools included as of November 7 2025:
 
@@ -32,7 +32,7 @@ Guide Section:
 
 5. Mod Manager must be within the same directory as DW4_Hyper.MODS (a custom file designed by my tools, meant to store currently enabled mods), linkdata.bin, mdata.bin (your base game stores it within the media\data\etc directory), and original_mdata.bin (it's essentially a backup of a vanilla/non-modded mdata.bin file that the mod manager uses for disabling mods). When you finish applying mods, copy the mdata.bin within the directory that the mod manager is in and paste it in media\data\etc (where it's originally stored/read by the game). This will overwrite the mdata.bin file and ensure the game uses the updated mdata.bin file to accept the mods applied to linkdata.bin.
 
-6. BNS tools must be within the same directory as the BNS files (your base game stores it within the media\data\sound\voice directory). It'll create 2 files which are voice_jp.ref and voice_us.ref, those are custom metadata files made by the unpacker to support unpacking the Ogg files. To make an audio mod that replaces the Ogg files from the BNS files, you'll probably need the version of LibVorbis that was used for Dynasty Warriors 4 Hyper which I think is 20020717. Once you replace the Ogg files with compartible ogg files you made/chose to use, repack with the repack button.
+6. BNS tools must be within the same directory as the BNS files (your base game stores it within the media\data\sound\voice directory). It'll create 2 files which are voice_jp.ref and voice_us.ref, those are custom metadata files made by the unpacker to support unpacking the Ogg files. To make an audio mod that replaces the Ogg files from the BNS files, you'll probably need the version of LibVorbis that was used for Dynasty Warriors 4 Hyper or a compatible version or atleast something that creates/converts to an ogg format DW4 Hyper accepts. Once you replace the Ogg files with compartible ogg files you made/chose to use, repack with the repack button.
 
 7. Resource_bin tools must be within the same directory as the resource.bin file (your base game stores it within the media\data\etc directory).
 
@@ -53,8 +53,6 @@ Every file unpacked from linkdata.bin is given an additional 4 bytes called "tai
 I've only been reverse engineering Dynasty Warriors 4 Hyper for a week or so (as of November 7 2025), so if you have any knowledge of stuff like stage/battlefield data, item data, values, etc and would like to help then it would speed up the process of developing more GUI tools since anything without documentation (which is the case for DW4 Hyper, i reversed it without existing documentation) I have to manually reverse. So the less time I have to spend reversing file formats that someone else may already know, the sooner I can build more editors. If you share any knowledge/documentation, I will credit you. I want to have GUI modder and non-modder friendly tools that make modding easy. Not everyone has hours to spend learning modding so having easy to use tools is essential to me.
 
 The Mod Manager is purpose-built for linkdata.bin. resource.bin and BNS use their own repackers.
-
-Mods can be any size; tools handle dynamic sizes (no “original size” constraint).
 
 For BNS audio, DW4 Hyper used an early Vorbis (libVorbis I 20020717). Use compatible Oggs for best results.
 
