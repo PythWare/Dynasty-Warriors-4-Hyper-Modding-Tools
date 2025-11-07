@@ -31,8 +31,10 @@ class ToolTip:
             self.tip_window = None
 
 class ModManager():
+    LILAC = "#C8A2C8"
     def __init__(self, root):
         self.root = root
+        self.root.configure(bg=self.LILAC)
         self.root.title("Dynasty Warriors 4 Hyper Mod Manager")
         self.root.minsize(1100, 700)
         self.root.resizable(False, False)
@@ -65,23 +67,28 @@ class ModManager():
             )
 
     # GUI
-    def gui_labels(self):
-        tk.Label(self.root, text="Mod Manager for applying and disabling mods to DW4 Hyper.").place(x=10, y=10)
-        tk.Label(self.root, text="Mod Name:").place(x=10, y=50)
-        tk.Label(self.root, text="Mod Author:").place(x=10, y=100)
-        tk.Label(self.root, text="Mod Version:").place(x=10, y=150)
-        tk.Label(self.root, text="Mod Description:").place(x=10, y=200)
-        tk.Label(self.root, text="Current Mods Enabled:").place(x=570, y=200)
+    def lilac_label(self, parent, **kw):
+        base = dict(bg=self.LILAC, bd=0, relief="flat", highlightthickness=0, takefocus=0)
+        base.update(kw)
+        return tk.Label(parent, **base)
 
-        self.mod_file = tk.Label(self.root, text="No mod selected.")
+    def gui_labels(self):
+        self.lilac_label(self.root, text="Mod Manager for applying and disabling mods to DW4 Hyper.").place(x=10, y=10)
+        self.lilac_label(self.root, text="Mod Name:").place(x=10, y=50)
+        self.lilac_label(self.root, text="Mod Author:").place(x=10, y=100)
+        self.lilac_label(self.root, text="Mod Version:").place(x=10, y=150)
+        self.lilac_label(self.root, text="Mod Description:").place(x=10, y=200)
+        self.lilac_label(self.root, text="Current Mods Enabled:").place(x=570, y=200)
+
+        self.mod_file = self.lilac_label(self.root, text="No mod selected.")
         self.mod_file.place(x=100, y=50)
-        self.mod_author = tk.Label(self.root, text="")
+        self.mod_author = self.lilac_label(self.root, text="")
         self.mod_author.place(x=100, y=100)
-        self.mod_version = tk.Label(self.root, text="")
+        self.mod_version = self.lilac_label(self.root, text="")
         self.mod_version.place(x=100, y=150)
 
     def gui_misc(self):
-        self.status_label = tk.Label(self.root, text="", fg="green")
+        self.status_label = self.lilac_label(self.root, text="", fg="green")
         self.status_label.place(x=10, y=500)
 
         self.description = tk.Text(self.root, wrap=tk.WORD, height=20, width=52)

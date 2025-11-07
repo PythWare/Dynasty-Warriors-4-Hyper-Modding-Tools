@@ -4,7 +4,18 @@ from tkinter import ttk, filedialog
 
 RECORD_SIZE = 24
 HEADER_SIZE = 4
+LILAC = "#C8A2C8"
 
+def setup_lilac_styles():
+    style = ttk.Style()
+    try:
+        style.theme_use("clam")  # clam respects bg colors nicely
+    except tk.TclError:
+        pass
+    style.configure("Lilac.TFrame",  background=LILAC)
+    style.configure("Lilac.TLabel",  background=LILAC, foreground="black", padding=0)
+    style.map("Lilac.TLabel", background=[("active", LILAC)])
+    
 class UnitEditor:
     def __init__(self, root):
         self.root = root
@@ -12,6 +23,8 @@ class UnitEditor:
         self.root.geometry("860x600")
         self.root.resizable(False, False)
 
+        setup_lilac_styles()
+        
         # State
         self.bin_path = ""  # set via Open
         self.slot_hex_values = [f"0x{n:X}" for n in range(0x200)]
@@ -19,15 +32,17 @@ class UnitEditor:
 
     # UI
     def _build_ui(self):
+         # Full-window lilac background for labels
+        self.bg = ttk.Frame(self.root, style="Lilac.TFrame")
+        self.bg.place(x=0, y=0, relwidth=1, relheight=1)
         # Top bar: Open + selected file label
         open_btn = ttk.Button(self.root, text="Open UNITDATA.BIN", command=self.ask_file)
         open_btn.place(x=20, y=20)
 
-        self.file_label = ttk.Label(self.root, text="No file selected.")
+        self.file_label = ttk.Label(self.bg, text="No file selected.", style="Lilac.TLabel")
         self.file_label.place(x=180, y=24)
 
-        # Slot selector (hex, read only)
-        ttk.Label(self.root, text="Slot (hex):").place(x=20, y=60)
+        ttk.Label(self.bg, text="Slot (hex):", style="Lilac.TLabel").place(x=20, y=60)
         self.slot_cb = ttk.Combobox(self.root, values=self.slot_hex_values, state="readonly", width=10)
         self.slot_cb.place(x=100, y=58)
         self.slot_cb.bind("<<ComboboxSelected>>", self._on_slot_change)
@@ -39,7 +54,7 @@ class UnitEditor:
         self.write_btn.place(x=220, y=56)
 
         # Status line
-        self.status_label = ttk.Label(self.root, text="", foreground="green")
+        self.status_label = ttk.Label(self.bg, text="", style="Lilac.TLabel", foreground="green")
         self.status_label.place(x=20, y=560)
 
         # Field labels and spinboxes
@@ -81,7 +96,7 @@ class UnitEditor:
         for i, label_text in enumerate(self.labels):
             if i <= 11:  # first 12 labels left column
                 y = top_y + i * row_h
-                ttk.Label(self.root, text=label_text).place(x=left_x_label, y=y+2)
+                ttk.Label(self.bg, text=label_text, style="Lilac.TLabel").place(x=left_x_label, y=y+2)
                 if i == 0:
                     sb = ttk.Spinbox(self.root, from_=0, to=65535, increment=1, width=8, wrap=False)
                 else:
@@ -89,7 +104,7 @@ class UnitEditor:
                 sb.place(x=left_x_box, y=y)
             else:        # remaining labels right column
                 y = top_y + (i-12) * row_h
-                ttk.Label(self.root, text=label_text).place(x=right_x_label, y=y+2)
+                ttk.Label(self.bg, text=label_text, style="Lilac.TLabel").place(x=right_x_label, y=y+2)
                 sb = ttk.Spinbox(self.root, from_=0, to=255, increment=1, width=6, wrap=True)
                 sb.place(x=right_x_box, y=y)
             self.spin_widgets.append(sb)

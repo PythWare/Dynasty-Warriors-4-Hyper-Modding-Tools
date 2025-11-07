@@ -11,12 +11,14 @@ folder2 = "US_Ogg_Files"
 folder3 = "New_BNS_Files"
 SECTOR = 2048
 ogg_header = b'\x4F\x67\x67\x53\x00\x02\x00\x00' # the correct header, always this for DW4 Hyper ogg files
+LILAC = "#C8A2C8"
 
 # GUI
 
 def GUI():
     """Main function to initialize the rest"""
     root = tk.Tk()
+    root.configure(bg=LILAC)
     root.title("Dynasty Warriors 4 Hyper BNS Unpacker")
     root.minsize(1000, 700)
     root.resizable(False, False)
@@ -45,12 +47,12 @@ def GUI():
 
 def gui_stuff(root):
     """This function handles GUI display related functions"""
-    tk.Label(
+    lilac_label(
         root,
         text="To unpack the files, click the Unpack button and ensure the needed files are in the same directory."
     ).place(x=60, y=50)
 
-    tk.Label(
+    lilac_label(
         root,
         text=(
             f"To repack, place .ogg files into {folder1} and/or {folder2}.\n"
@@ -59,7 +61,7 @@ def gui_stuff(root):
     ).place(x=60, y=250)
 
     # Status label
-    status_label = tk.Label(root, text="", fg="green")
+    status_label = lilac_label(root, text="", fg="green")
     status_label.place(x=60, y=500)
     return status_label
 
@@ -207,7 +209,7 @@ def init_progress(root):
     prog["bar"] = ttk.Progressbar(root, mode="determinate", length=320)
     prog["bar"].grid(row=99, column=0, columnspan=3, pady=(8, 0), sticky="ew")
 
-    tk.Label(root, textvariable=prog["var"], anchor="w").grid(
+    lilac_label(root, textvariable=prog["var"], anchor="w").grid(
         row=100, column=0, columnspan=3, sticky="ew"
     )
     return prog
@@ -228,6 +230,11 @@ def set_progress(root, prog, done, total, note=None):
 
     # Keep UI responsive without reentering the event loop
     root.update_idletasks()
+    
+def lilac_label(parent, **kw):
+    base = dict(bg=LILAC, bd=0, relief="flat", highlightthickness=0, takefocus=0)
+    base.update(kw)
+    return tk.Label(parent, **base)
 
 if __name__ == "__main__":
     GUI()
