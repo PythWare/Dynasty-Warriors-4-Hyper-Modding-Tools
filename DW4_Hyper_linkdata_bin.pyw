@@ -51,7 +51,7 @@ def GUI():
     btn_repack.place(x=700, y=250)
 
     # stash unpack button so we can disable/enable during work
-    root._dw4_buttons = (btn_unpack,)
+    root._dw4_buttons = (btn_unpack, btn_repack)
     
     root.mainloop()
 

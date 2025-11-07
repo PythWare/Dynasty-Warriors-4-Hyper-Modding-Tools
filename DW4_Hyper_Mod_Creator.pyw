@@ -111,7 +111,7 @@ class ModCreator():
                 description_len = len(description_bytes)
                 size = os.path.getsize(self.file_path) # size of mod file
                 # Write to new mod file
-                with open(new_mod, "wb") as f1, open(self.file_path, "r+b") as original:
+                with open(new_mod, "wb") as f1, open(self.file_path, "rb") as original:
                     f1.write(new_mod_raw_len.to_bytes(1, "little")) # write length of the mod's filename
                     f1.write(new_mod_raw) # write mod file's name
                     f1.write(file_count.to_bytes(4, "little"))  # files
