@@ -34,3 +34,9 @@ BNS tools must be within the same directory as the BNS files (your base game sto
 
 Resource_bin tools must be within the same directory as the resource.bin file (your base game stores it within the media\data\etc directory).
 
+When you run the repacker button for resource_bin tools, linkdata tools, or BNS tools make sure you only have files you want repacked stored within the folder that will be repacked.
+
+Extra Info:
+
+
+
