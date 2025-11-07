@@ -53,6 +53,8 @@ Most interesting mod content (stages, units, textures, models, etc) lives in lin
 
 Extra info & tips
 
+I am not affiliated with Koei Tecmo, these tools are provided as a means to mod an offline, singleplayer game that came out in 2005. If Koei Tecmo takes issue, please contact me.
+
 Every file unpacked from linkdata.bin is given an additional 4 bytes called "taildata" at the end of the file, you must not remove it. It's used for the mod manager for applying/disabling mods. You can mod files unpacked that have taildata but please keep the last 4 bytes unchanged unless you know what you're doing since the mod manager relies on taildata. The taildata does not impact the usablity of files, it's purely used for mod manager.
 
 I've only been reverse engineering Dynasty Warriors 4 Hyper for a week or so (as of November 7 2025), so if you have any knowledge of stuff like stage/battlefield data, item data, values, etc and would like to help then it would speed up the process of developing more GUI tools since anything without documentation (which is the case for DW4 Hyper, i reversed it without existing documentation) I have to manually reverse. So the less time I have to spend reversing file formats that someone else may already know, the sooner I can build more editors. If you share any knowledge/documentation, I will credit you. I want to have GUI modder and non-modder friendly tools that make modding easy. Not everyone has hours to spend learning modding so having easy to use tools is essential to me.
@@ -65,4 +67,4 @@ DW4HM (single file mods) and DW4HP (mod packages, meant to store a lot of mod fi
 
 Roadmap:
 
-More GUI editors (stages/battlefields, translation, items, etc.).
+More GUI editors (stages/battlefields, translation, items, etc).
