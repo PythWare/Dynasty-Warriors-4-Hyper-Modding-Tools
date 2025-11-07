@@ -1,4 +1,4 @@
-Lightweight, GUI-first modding tools for Dynasty Warriors 4 Hyper. Currently there are unpackers, repackers, a mod creator, mod manager to manage/apply mods. It's written in pure Python/Tkinter with minimal dependencies. Designed to be friendly for both modders and curious players. It's important to read the guide section. If you encounter any issues or have questions, let me know on here or reddit (username on reddit is ThatFlowerGamu).
+Lightweight, GUI-first modding tools for Dynasty Warriors 4 Hyper. Currently there are unpackers, repackers, a mod creator, mod manager to manage/apply mods. It's written in pure Python/Tkinter with minimal dependencies. Designed to be friendly for both modders and curious players. It's important to read the guide section and Extra info & tips. If you encounter any issues or have questions, let me know on here or reddit (username on reddit is ThatFlowerGamu).
 
 Tools included as of November 7 2025:
 
@@ -22,34 +22,40 @@ Unit Editor (DW4_Hyper_Unit_Editor.pyw), editor for UNITDATA.BIN which stores un
 
 Guide Section:
 
-You must have Python 3 installed.
+1. You must have Python 3 installed.
 
-Please backup your linkdata.bin, resource.bin, BNS files, and mdata.bin files before using these tools.
+2. Please backup your linkdata.bin, resource.bin, BNS files, and mdata.bin files before using these tools.
 
-You don't have to have the tools within the same directory, you just need them in the same folder that the files it needs. So if you want to keep things clean, i'd suggest making a "modding" folder, storing the files needed each tool needs (it'll be lsited below) within that folder along with the scripts but it's up to you. All that matters is each script that I list below is paired with its needed files, Unit Editor and Mod Creator are exceptions since they use filedialog but again, your choice. 
+3. You don't have to have the tools within the same directory, you just need them in the same folder with the files it needs. So if you want to keep things clean, i'd suggest making a "modding" folder, storing the files needed each tool needs (it'll be listed below) within that folder along with the scripts but it's up to you. All that matters is each script that I list below is paired with its needed files, Unit Editor and Mod Creator are exceptions since they use filedialog but again, your choice. 
 
-Linkdata tools must be within the same directory as linkdata.bin, filenames.ref (a custom text file I made storing filenames for files within linkdata.bin that I found within the executable), mdata.bin (your base game stores it within the media\data\etc directory), and original_mdata.bin (it's essentially a backup of a vanilla/non-modded mdata.bin file that the mod manager uses for disabling mods).
+4. Linkdata tools must be within the same directory as linkdata.bin, filenames.ref (a custom text file I made storing filenames for files within linkdata.bin that I found within the executable), mdata.bin (your base game stores it within the media\data\etc directory), and original_mdata.bin (it's essentially a backup of a vanilla/non-modded mdata.bin file that the mod manager uses for disabling mods).
 
-Mod Manager must be within the same directory as DW4_Hyper.MODS (a custom file designed by my tools, meant to store currently enabled mods), linkdata.bin, mdata.bin (your base game stores it within the media\data\etc directory), and original_mdata.bin (it's essentially a backup of a vanilla/non-modded mdata.bin file that the mod manager uses for disabling mods).
+5. Mod Manager must be within the same directory as DW4_Hyper.MODS (a custom file designed by my tools, meant to store currently enabled mods), linkdata.bin, mdata.bin (your base game stores it within the media\data\etc directory), and original_mdata.bin (it's essentially a backup of a vanilla/non-modded mdata.bin file that the mod manager uses for disabling mods).
 
-BNS tools must be within the same directory as the BNS files (your base game stores it within the media\data\sound\voice directory). It'll create 2 files which are voice_jp.ref and voice_us.ref, those are custom metadata files made by the unpacker to support unpacking the Ogg files. To make an audio mod that replaces the Ogg files from the BNS files, you'll probably need the version of LibVorbis that was used for Dynasty Warriors 4 Hyper which I think is 20020717. Once you replace the Ogg files with compartible ogg files you made/chose to use, repack with the repack button.
+6. BNS tools must be within the same directory as the BNS files (your base game stores it within the media\data\sound\voice directory). It'll create 2 files which are voice_jp.ref and voice_us.ref, those are custom metadata files made by the unpacker to support unpacking the Ogg files. To make an audio mod that replaces the Ogg files from the BNS files, you'll probably need the version of LibVorbis that was used for Dynasty Warriors 4 Hyper which I think is 20020717. Once you replace the Ogg files with compartible ogg files you made/chose to use, repack with the repack button.
 
-Resource_bin tools must be within the same directory as the resource.bin file (your base game stores it within the media\data\etc directory).
+7. Resource_bin tools must be within the same directory as the resource.bin file (your base game stores it within the media\data\etc directory).
 
-When you run the repacker button for resource_bin tools, linkdata tools, or BNS tools make sure you only have files you want repacked stored within the folder that will be repacked.
+8. When you run the repacker button for resource_bin tools, linkdata tools, or BNS tools make sure you only have files you want repacked stored within the folder that will be repacked.
 
-Extra Info:
+Notes on filenames:
 
-the mod manager is meant to be used with linkdata.bin which does not use file repacking, it instead injects/appends your mods. resource.bin and the BNS files repack with their own script I made.
+DW4 Hyper often stores useful names for container files (e.g., title.pd2) but not for files inside PD2/BNS/resource.bin containers.
 
-I chose to do file repacking for resource.bin and BNS files since they're significantly smaller than linkdata.bin. Your mods/replacements can be any file size, the mod manager and repackers support dynamic file sizes so that means you're not restricted to original file sizes.
+For internal entries (files stored within a PD2, BNS, resource.bin container that are unpacked), tools assign incrementing filenames with a correct extension based on content.
 
-To clarify, the game does not have useful (for us) filenames for files stored within PD2 files (mini containers stored within the larger container linkdata.bin). DW4 Hyper also does not have relevant filenames for files stored within BNS files and the resource.bin file.
+Most interesting mod content (stages, units, textures, models, etc) lives in linkdata.bin, so this is rarely a blocker.
 
-I've already checked the executable and files, so every file with proper filenames within linkdata.bin is given the correct/relevant filename but files stored within mini containers like PD2 files have incrementing filenames (i.e., title.pd2 is the named container file but the 59 files unpacked from it have no useful filenames like "title.bmp" used by the game so they're being given incrementing filenames with extensions based on the type of file it is). That's not an issue on my part, koei just at the time seemed to name the containers like pd2 files and used a hash name or something else not relevant for each packed file within the PD2 file. Same for resource.bin and BNS files.
+Extra info & tips
 
-So to summarize, if a file is given an incrementing filename it's atleast assigned the proper extension based on the file data but most of the game's assets and things most modders would be interested in modding such as stage/battlefield data, textures, models, etc are within linkdata.bin so it's not a big problem. 
+Every file unpacked from linkdata.bin is given an additional 4 bytes called "taildata" at the end of the file, you must not remove it. It's used for the mod manager for applying/disabling mods. You can mod files unpacked that have taildata but please keep the last 4 bytes unchanged unless you know what you're doing since the mod manager relies on taildata. The taildata does not impact the usablity of files, it's purely used for mod manager.
 
-Future Plans:
+The Mod Manager is purpose-built for linkdata.bin. resource.bin and BNS use their own repackers.
 
-I'd like to build more GUI file modding tools like the Unit Editor. For example, I'd like to make a stage/battlefield editor, translation tool for translators that want to translate DW4 hyper, item editor, etc.
+Mods can be any size; tools handle dynamic sizes (no “original size” constraint).
+
+For BNS audio, DW4 Hyper used an early Vorbis (libVorbis I 20020717). Use compatible Oggs for best results.
+
+Roadmap:
+
+More GUI editors (stages/battlefields, translation, items, etc.).
