@@ -8,6 +8,7 @@ from tkinter import filedialog
 filename_list = "filenames.ref" # custom text file storing filenames, obtained from the executable
 container_file = "linkdata.BIN" # main container file
 metadata_file = "mdata.bin" # metadata file, similar to the idx format
+extra_mdata = "original_mdata.bin" # to be used with mod manager
 folder = "Unpacked" # stores unpacked files
 
 filecount = 2364 # amount of files within container_file, mini containers such as PD2 files store additional files
@@ -29,6 +30,8 @@ def GUI():
     root.title("Dynasty Warriors 4 Hyper linkdata_bin tool")
     root.minsize(1000, 700)
     root.resizable(False, False)
+
+    backup_mdata() # call backup function, ensuring original_mdata.bin exists
 
     status_label = gui_stuff(root)  # return the label so we can pass it
     progress = init_progress(root)  # capture the progress object
@@ -190,7 +193,7 @@ def file_writer(offset: int, file_size: int, data: bytes, fname: str, status_lab
             pd2_folder = os.path.join(os.path.dirname(complete_path), base + "_PD2")
             PD2_Unpack(complete_path, pd2_folder)
     except Exception as e:
-        error_function(f"Error writing {fname}: {e}", status_label)
+        status_label.config(text=f"Error writing {fname}: {e}", fg="red")
 
 def PD2_Unpack(file: str, folder: str):
     """Unpack PD2 container into 'folder' (ignores ANY trailing metadata in the caller)."""
@@ -234,7 +237,7 @@ def PD2_Unpack(file: str, folder: str):
                     f2.write(data)
 
     except Exception as e:
-        error_function(f"Script failed in PD2_Unpack for {file}: {e}")
+        status_label.config(text=f"Script failed in PD2_Unpack for {file}: {e}", fg="red")
 
 # Utility Functions
 
@@ -328,7 +331,17 @@ def Repack_PD2(status_label):
         status_label.config(text=f"Repacked → {out_pd2}", fg="green")
 
     except Exception as e:
-        error_function(f"PD2 repack failed: {e}", status_label)
+        status_label.config(text=f"PD2 repack failed: {e}", fg="red")
+
+def backup_mdata():
+    """This functions creates a backup of mdata.bin for mod manager usage"""
+    try:
+        if not os.path.isfile(extra_mdata):
+            with open(metadata_file, "rb") as f1, open(extra_mdata, "wb") as f2:
+                data = f1.read()
+                f2.write(data)
+    except Exception as e:
+        status_label.config(text=f"Backup of mdata.bin failed: {e}", fg="red")
 
 def natural_key(s):
     """Handles sorting of incrementing filenames"""
