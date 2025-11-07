@@ -61,9 +61,7 @@ The Mod Manager is purpose-built for linkdata.bin. resource.bin and BNS use thei
 
 For BNS audio, DW4 Hyper used an early Vorbis (libVorbis I 20020717). Use compatible Oggs for best results.
 
-DW4HM (single file mods) and DW4HP (mod packages, meant to store a lot of mod files, think of it as a container for bulk mods) are designed to be sharable as well. I'll be seeing about creating a nexus page for Dynasty Warriors 4 Hyper mods but essentially, as long as you have the mod manager it can apply any DW4HM and DW4HP mod files.
-
-So let's say I made a custom battle, changed models, modded unit data, etc. I create the mod file or package after I finish modding the file I wantes to mod and upload it. If you have the mod manager you could apply/disable the downloaded/shared mods.
+DW4HM (single file mods) and DW4HP (mod packages, meant to store a lot of mod files, think of it as a container for bulk mods) are designed to be sharable as well. I'll be seeing about creating a nexus page for Dynasty Warriors 4 Hyper mods but essentially, as long as you have the mod manager it can apply any DW4HM and DW4HP mod files. So let's say I made a custom battle, changed models, modded unit data, etc. I create the mod file or package after I finish modding the file I wanted to mod and upload it. If you have the mod manager you could apply/disable the downloaded/shared mods.
 
 Roadmap:
 
