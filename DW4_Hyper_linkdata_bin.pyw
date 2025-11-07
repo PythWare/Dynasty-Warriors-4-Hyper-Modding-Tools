@@ -9,7 +9,6 @@ filename_list = "filenames.ref" # custom text file storing filenames, obtained f
 container_file = "linkdata.BIN" # main container file
 metadata_file = "mdata.bin" # metadata file, similar to the idx format
 folder = "Unpacked" # stores unpacked files
-error_file = "Error.txt"
 
 filecount = 2364 # amount of files within container_file, mini containers such as PD2 files store additional files
 offset_to_metadata = 0x10 # for metadata file
@@ -161,7 +160,6 @@ def unpack_worker(notify):
                 if (i & 31) == 0 or (i + 1) == total:
                     notify(("progress", i + 1, total, None))
 
-        remove_error_file()
         notify(("done", "Unpack complete."))
     except FileNotFoundError:
         notify(("status", f"Missing files. Ensure {container_file}, {metadata_file}, {filename_list} are present.", "red"))
@@ -335,22 +333,6 @@ def Repack_PD2(status_label):
 def natural_key(s):
     """Handles sorting of incrementing filenames"""
     return [int(t) if t.isdigit() else t.lower() for t in re.split(r'(\d+)', s)]
-
-def error_function(message: str, status_label=None):
-    """Handles error management and status updates"""
-    try:
-        with open(error_file, "a") as w1:
-            w1.write(message + "\n")
-        if status_label:
-            status_label.config(text="An error occurred. See Error.txt for details.", fg="red")
-    except Exception as e:
-        if status_label:
-            status_label.config(text=f"Failed to write to error log: {e}", fg="red")
-
-def remove_error_file():
-    """Removes existing error log if present (clean successful run)"""
-    if os.path.isfile(error_file):
-        os.remove(error_file)
 
 def lilac_label(parent, **kw):
     base = dict(bg=LILAC, bd=0, relief="flat", highlightthickness=0, takefocus=0)
