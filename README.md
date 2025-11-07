@@ -40,7 +40,7 @@ Guide Section:
 
 Notes on filenames:
 
-DW4 Hyper often stores useful names for container files (e.g., title.pd2) but not for files inside PD2/BNS/resource.bin containers.
+DW4 Hyper often stores relavent filenames for container files (e.g., title.pd2) & loose files for files stored within linkdata.bin but not for files inside PD2/BNS/resource.bin containers.
 
 For internal entries (files stored within a PD2, BNS, resource.bin container that are unpacked), tools assign incrementing filenames with a correct extension based on content.
 
