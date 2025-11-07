@@ -1,4 +1,4 @@
-Lightweight, GUI-first modding tools for Dynasty Warriors 4 Hyper. Currently there are unpackers, repackers, a mod creator, mod manager to manage/apply mods. It's written in pure Python/Tkinter with minimal dependencies. Designed to be friendly for both modders and curious players. It's important to read the guide section.
+Lightweight, GUI-first modding tools for Dynasty Warriors 4 Hyper. Currently there are unpackers, repackers, a mod creator, mod manager to manage/apply mods. It's written in pure Python/Tkinter with minimal dependencies. Designed to be friendly for both modders and curious players. It's important to read the guide section. If you encounter any issues or have questions, let me know on here or reddit (username on reddit is ThatFlowerGamu).
 
 Tools included as of November 7 2025:
 
@@ -22,6 +22,8 @@ Unit Editor (DW4_Hyper_Unit_Editor.pyw), editor for UNITDATA.BIN which stores un
 
 Guide Section:
 
+You must have Python 3 installed.
+
 Please backup your linkdata.bin, resource.bin, BNS files, and mdata.bin files before using these tools.
 
 You don't have to have the tools within the same directory, you just need them in the same folder that the files it needs. So if you want to keep things clean, i'd suggest making a "modding" folder, storing the files needed each tool needs (it'll be lsited below) within that folder along with the scripts but it's up to you. All that matters is each script that I list below is paired with its needed files, Unit Editor and Mod Creator are exceptions since they use filedialog but again, your choice. 
@@ -38,5 +40,16 @@ When you run the repacker button for resource_bin tools, linkdata tools, or BNS 
 
 Extra Info:
 
+the mod manager is meant to be used with linkdata.bin which does not use file repacking, it instead injects/appends your mods. resource.bin and the BNS files repack with their own script I made.
 
+I chose to do file repacking for resource.bin and BNS files since they're significantly smaller than linkdata.bin. Your mods/replacements can be any file size, the mod manager and repackers support dynamic file sizes so that means you're not restricted to original file sizes.
 
+To clarify, the game does not have useful (for us) filenames for files stored within PD2 files (mini containers stored within the larger container linkdata.bin). DW4 Hyper also does not have relevant filenames for files stored within BNS files and the resource.bin file.
+
+I've already checked the executable and files, so every file with proper filenames within linkdata.bin is given the correct/relevant filename but files stored within mini containers like PD2 files have incrementing filenames (i.e., title.pd2 is the named container file but the 59 files unpacked from it have no useful filenames like "title.bmp" used by the game so they're being given incrementing filenames with extensions based on the type of file it is). That's not an issue on my part, koei just at the time seemed to name the containers like pd2 files and used a hash name or something else not relevant for each packed file within the PD2 file. Same for resource.bin and BNS files.
+
+So to summarize, if a file is given an incrementing filename it's atleast assigned the proper extension based on the file data but most of the game's assets and things most modders would be interested in modding such as stage/battlefield data, textures, models, etc are within linkdata.bin so it's not a big problem. 
+
+Future Plans:
+
+I'd like to build more GUI file modding tools like the Unit Editor. For example, I'd like to make a stage/battlefield editor, translation tool for translators that want to translate DW4 hyper, item editor, etc.
