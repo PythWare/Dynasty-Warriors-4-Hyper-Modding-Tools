@@ -2,8 +2,10 @@ import os
 import tkinter as tk
 from tkinter import ttk, filedialog
 
+# Meta details
 RECORD_SIZE = 24
 HEADER_SIZE = 4
+UNIT_SLOT_COUNT = 0x0 # offset to unit slot count, 4 bytes long
 LILAC = "#C8A2C8"
 
 def setup_lilac_styles():
@@ -48,10 +50,22 @@ class UnitEditor:
         self.slot_cb.bind("<<ComboboxSelected>>", self._on_slot_change)
         self.slot_cb.current(0)  # default 0x0
 
-        # Button
+        # Buttons
 
-        self.write_btn = ttk.Button(self.root, text="Write Data", command=self.submit_unit, width=14)
+        self.write_btn = ttk.Button(self.root,
+            text="Write Data",
+            command=self.submit_unit,
+            width=14
+        )
         self.write_btn.place(x=220, y=56)
+    
+        self.add_slots_btn = ttk.Button(self.root,
+            text="Add 10 unit slots (reusable button)",
+            width=32,
+            command=self.add_slots
+        )
+        self.add_slots_btn.place(x=400, y=56)
+
 
         # Status line
         self.status_label = ttk.Label(self.bg, text="", style="Lilac.TLabel", foreground="green")
@@ -142,6 +156,49 @@ class UnitEditor:
             v = 0
         return 0 if v < 0 else 65535 if v > 65535 else v
 
+    def _read_slot_count(self) -> int:
+        """Read 4-byte LE unit slot count from header (offset 0)."""
+        if not self.bin_path:
+            return 0
+        with open(self.bin_path, "rb") as f:
+            f.seek(UNIT_SLOT_COUNT)
+            data = f.read(4)
+        return int.from_bytes(data, "little") if len(data) == 4 else 0
+
+    def _write_slot_count(self, count: int):
+        """Write 4 byte LE unit slot count to header at offset 0"""
+        with open(self.bin_path, "r+b") as f:
+            f.seek(UNIT_SLOT_COUNT)
+            f.write(count.to_bytes(4, "little"))
+
+    def _ensure_size_for_slots(self, count: int):
+        """Grow file so records up to (count-1) exist."""
+        needed_size = HEADER_SIZE + (count * RECORD_SIZE)
+        cur_size = os.path.getsize(self.bin_path)
+        if cur_size < needed_size:
+            cur_body = cur_size - 4  # body excludes taildata
+            with open(self.bin_path, "r+b") as f:
+                f.seek(cur_body) # seek taildata to keep
+                taildata = f.read(4) # read taildata
+                f.truncate(cur_body) # remove taildata
+                f.truncate(needed_size) # grow file to new required size
+                
+                f.seek(needed_size) # seek taildata to overwrite
+                f.write(taildata) # write taildata so mod manager has what's needed
+
+    def _refresh_slot_combobox(self, count: int):
+        """Update combobox values to reflect current slot count."""
+        vals = [f"0x{n:X}" for n in range(max(0, count))]
+        if not vals:
+            vals = ["0x0"]
+        self.slot_hex_values = vals
+        self.slot_cb["values"] = vals
+        # Keep index in range
+        idx = self.slot_cb.current()
+        if idx is None or idx < 0 or idx >= len(vals):
+            self.slot_cb.current(0)
+
+
     # File picking
     def ask_file(self):
         path = filedialog.askopenfilename(
@@ -154,7 +211,9 @@ class UnitEditor:
             return
         self.bin_path = path
         self.file_label.config(text=os.path.basename(path))
-        # Show slot 0 immediately
+        # reflect real slot count from header, then show slot 0
+        count = self._read_slot_count()
+        self._refresh_slot_combobox(count)
         self.slot_cb.current(0)
         self.read_current_slot()
 
@@ -216,13 +275,6 @@ class UnitEditor:
 
             record = name + bytes(bvals)  # total 24 bytes
 
-            # If file is smaller than needed, extend with zeros
-            need_size = off + RECORD_SIZE
-            cur_size = os.path.getsize(self.bin_path)
-            if cur_size < need_size:
-                with open(self.bin_path, "ab") as fext:
-                    fext.write(b"\x00" * (need_size - cur_size))
-
             # Write record
             with open(self.bin_path, "r+b") as f:
                 f.seek(off)
@@ -235,6 +287,36 @@ class UnitEditor:
         except Exception as e:
             self.status_label.config(text=f"Error writing: {e}", foreground="red")
 
+    def add_slots(self):
+        """Increase unit slots by 10 and extend file accordingly."""
+        if not self.bin_path:
+            self.status_label.config(text="Open a BIN file first.", foreground="red")
+            return
+
+        # disable to avoid double-click races
+        self.add_slots_btn.config(state="disabled")
+        try:
+            current = self._read_slot_count()
+            new_count = current + 10
+
+            # Ensure file has space for the new records, then write new count
+            self._ensure_size_for_slots(new_count)
+            self._write_slot_count(new_count)
+
+            # Reflect in UI and give feedback
+            self._refresh_slot_combobox(new_count)
+            self.status_label.config(
+                text=f"Unit slots increased: {current} → {new_count}", foreground="green"
+            )
+
+            # reload current slot fields (keeps UI consistent)
+            self.read_current_slot()
+
+        except Exception as e:
+            self.status_label.config(text=f"Error adding slots: {e}", foreground="red")
+        finally:
+            # brief pause before re-enabling (tweak ms if you want a longer 'cooldown')
+            self.root.after(300, lambda: self.add_slots_btn.config(state="normal"))
 
 def main():
     root = tk.Tk()
