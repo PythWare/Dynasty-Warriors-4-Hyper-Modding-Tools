@@ -18,7 +18,8 @@ resource.bin Tools (DW4_Hyper_resource_bin.pyw) that unpacks/repacks resource.bi
 ![dw45](https://github.com/user-attachments/assets/9256ee0f-3f28-4f74-aef3-d027d812ce33)
 
 Unit Editor (DW4_Hyper_Unit_Editor.pyw), editor for UNITDATA.BIN which stores unit data like parameters (model, weapon model, voice id, motion/moveset, movement speed, jump speed, etc).
-![dw44](https://github.com/user-attachments/assets/f611fbbf-156a-47bb-b801-7e14d2af0e75)
+![u1](https://github.com/user-attachments/assets/92a56b3c-aaf1-4b58-bd94-aa24710b0cd9)
+
 
 Example Mods:
 ![b3](https://github.com/user-attachments/assets/931f8b12-f581-454b-8fb7-48fffb7b2a8c)
