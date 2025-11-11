@@ -17,8 +17,8 @@ BNS Tools (DW4_Hyper_BNS.pyw) that unpacks/repacks voice BNS (JP/US), it's secto
 resource.bin Tools (DW4_Hyper_resource_bin.pyw) that unpacks/repacks resource.bin.
 ![dw45](https://github.com/user-attachments/assets/9256ee0f-3f28-4f74-aef3-d027d812ce33)
 
-Unit Editor (DW4_Hyper_Unit_Editor.pyw), editor for UNITDATA.BIN which stores unit data like parameters (model, weapon model, voice id, motion/moveset, movement speed, jump speed, etc).
-![u1](https://github.com/user-attachments/assets/92a56b3c-aaf1-4b58-bd94-aa24710b0cd9)
+Unit Editor (DW4_Hyper_Unit_Editor.pyw), editor for UNITDATA.BIN which stores unit data like parameters (model, weapon model, voice id, motion/moveset, movement speed, jump speed, etc). You can now expand the unitdata.bin file which means you can add more units into the game than what it originally started with. The Unit Editor now essentially supports having more units in the game than Dynasty Warriors 4 XL by being able to expand the unitdata.bin file.
+![u1](https://github.com/user-attachments/assets/e7dfc7ba-1437-4e20-80a8-9dda7832a19d)
 
 
 Example Mods:
