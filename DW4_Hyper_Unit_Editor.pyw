@@ -64,25 +64,25 @@ class UnitEditor:
             "Unknown 1",           # 1
             "Voice",               # 2
             "Model",               # 3
-            "Unknown 2",           # 4
+            "Color",           # 4
             "Moveset",             # 5
-            "Unknown 3",           # 6
-            "Unknown 4",           # 7
-            "Unknown 5",           # 8
-            "Unknown 6",           # 9
-            "Unknown 7",           #10
-            "Unknown 8",           #11
-            "Unknown 9",           #12
-            "Movement Speed",      #13
-            "Unknown 10",          #14
+            "Mount",           # 6
+            "Attack",           # 7
+            "Defense",           # 8
+            "Bow Attack",           # 9
+            "Bow Defense",           #10
+            "Mounted Attack",           #11
+            "Mounted Defense",           #12
+            "Speed",      #13
+            "Strafe Speed",          #14
             "Jump Height",         #15
-            "Unknown 11",          #16
-            "Unknown 12",          #17
-            "Unknown 13",          #18
-            "Unknown 14",          #19
+            "AI Level",          #16
+            "AI Type",          #17
+            "Tactics",          #18
+            "Weapon EXP Gained",          #19
             "Weapon",              #20
-            "Unknown 15",          #21
-            "Unknown 16",          #22
+            "item/heal count for NPCs",          #21
+            "Orb for NPCs",          #22
         ]
 
         # Spinboxes
