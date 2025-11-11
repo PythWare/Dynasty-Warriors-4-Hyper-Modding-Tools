@@ -1,6 +1,6 @@
 Lightweight, GUI-first modding tools for Dynasty Warriors 4 Hyper. Currently there are unpackers, repackers, a mod creator, mod manager to manage/apply mods. It's written in pure Python/Tkinter with minimal dependencies. Designed to be friendly for both modders and curious players. Mods can be any size, tools handle dynamic sizes (no “original size” constraint). It's important to read the guide section and Extra info & tips. Creedit goes to Michael, Gamerman, and HighPriestFuneral for documentation/info on DW4 Hyper. If you encounter any issues or have questions, let me know on here or reddit (username on reddit is ThatFlowerGamu).
 
-Tools included as of November 7 2025:
+Tools included as of November 11 2025:
 
 Linkdata Tools (DW4_Hyper_linkdata_bin.pyw) that unpacks linkdata.bin, unpacks PD2s (mini containers stored within linkdata.bin), repack PD2s, progress UI.
 ![dw41](https://github.com/user-attachments/assets/44d58576-0303-4937-80f7-1a4bf17f2eff)
@@ -58,7 +58,7 @@ I am not affiliated with Koei Tecmo, these tools are provided as a means to mod 
 
 Every file unpacked from linkdata.bin is given an additional 4 bytes called "taildata" at the end of the file, you must not remove it. It's used for the mod manager for applying/disabling mods. You can mod files unpacked that have taildata but please keep the last 4 bytes unchanged unless you know what you're doing since the mod manager relies on taildata. The taildata does not impact the usablity of files, it's purely used for mod manager.
 
-I've only been reverse engineering Dynasty Warriors 4 Hyper for a week or so (as of November 7 2025), so if you have any knowledge of stuff like stage/battlefield data, item data, values, etc and would like to help then it would speed up the process of developing more GUI tools since anything without documentation (which is the case for DW4 Hyper, i reversed it without existing documentation) I have to manually reverse. So the less time I have to spend reversing file formats that someone else may already know, the sooner I can build more editors. If you share any knowledge/documentation, I will credit you. I want to have GUI modder and non-modder friendly tools that make modding easy. Not everyone has hours to spend learning modding so having easy to use tools is essential to me.
+I've only been reverse engineering Dynasty Warriors 4 Hyper for a week or so (as of November 11 2025), so if you have any knowledge of stuff like stage/battlefield data, item data, values, etc and would like to help then it would speed up the process of developing more GUI tools since anything without documentation (which is the case for DW4 Hyper, i reversed it without existing documentation) I have to manually reverse. So the less time I have to spend reversing file formats that someone else may already know, the sooner I can build more editors. If you share any knowledge/documentation, I will credit you. I want to have GUI modder and non-modder friendly tools that make modding easy. Not everyone has hours to spend learning modding so having easy to use tools is essential to me.
 
 The Mod Manager is purpose-built for linkdata.bin. resource.bin and BNS use their own repackers.
 
