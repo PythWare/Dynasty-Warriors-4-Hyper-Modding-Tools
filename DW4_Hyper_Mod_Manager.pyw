@@ -659,7 +659,7 @@ class ModManager():
             open(self.mods_enabled_file, "wb").close()
             self.mods_list.delete(0, tk.END)
             self.status_label.config(
-                text="All mods disabled (mdata.bin & linkdata.bin restored to unmodded copies).",
+                text="All mods disabled (mdata.bin & linkdata.bin restored to unmodded copies.",
                 fg="blue"
             )
 
@@ -683,3 +683,4 @@ def runner():
 
 if __name__ == "__main__":
     runner()
+
