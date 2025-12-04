@@ -1,4 +1,4 @@
-import os
+import os, base64, shutil
 import tkinter as tk
 from tkinter import filedialog
 
@@ -36,7 +36,7 @@ class ModManager():
         self.root = root
         self.root.configure(bg=self.LILAC)
         self.root.title("Dynasty Warriors 4 Hyper Mod Manager")
-        self.root.minsize(1100, 700)
+        self.root.minsize(1700, 800)
         self.root.resizable(False, False)
 
         # Files
@@ -54,16 +54,19 @@ class ModManager():
         self.taildata = None
         self.original_container_size = 1086416896 # original unmodded size of linkdata.bin, will be used for truncating
         self.SECTOR = 0x800
+        self.mod_images = []         # list for photos
+        self.current_image_index = 0
 
         # GUI
         self.gui_labels()
         self.gui_misc()
         self.current_mods()
+        self._clear_images()
 
         if not os.path.exists(self.original_metadata_container):
             self.status_label.config(
                 text=f"Warning: {self.original_metadata_container} not found. Disables will fall back to ledger values.",
-                fg="orange"
+                fg="red"
             )
 
     # GUI
@@ -89,32 +92,79 @@ class ModManager():
 
     def gui_misc(self):
         self.status_label = self.lilac_label(self.root, text="", fg="green")
-        self.status_label.place(x=10, y=500)
+        self.status_label.place(x=10, y=700)
 
         self.description = tk.Text(self.root, wrap=tk.WORD, height=20, width=52)
         self.description.place(x=110, y=200)
         self.description.config(state=tk.DISABLED)
 
-        btn1 = tk.Button(self.root, text="Select a Mod", command=self.mod_reader, height=3, width=20)
+        btn1 = tk.Button(self.root, text="Select a Mod", command=self.mod_reader,
+                         height=3, width=20)
         btn1.place(x=500, y=100)
         ToolTip(btn1, "Read a .DW4HM or .DW4HP and show its description.")
 
-        self.apply_btn = tk.Button(self.root, text="Apply Mod", command=self.mod_writer, height=3, width=20)
+        self.apply_btn = tk.Button(self.root, text="Apply Mod", command=self.mod_writer,
+                                   height=3, width=20)
         self.apply_btn.place(x=700, y=100)
         ToolTip(self.apply_btn, "Append payload to linkdata.bin and update mdata.bin.")
 
-        self.disable_btn = tk.Button(self.root, text="Disable Mod", command=self.disable_mod, height=3, width=20)
+        self.disable_btn = tk.Button(self.root, text="Disable Mod", command=self.disable_mod,
+                                     height=3, width=20)
         self.disable_btn.place(x=900, y=100)
         ToolTip(self.disable_btn, "Restore original base/size for the selected mod name.")
 
-        btn4 = tk.Button(self.root, text="Disable All Mods (metadata restore)", command=self.disable_mods, height=3, width=40)
+        btn4 = tk.Button(self.root, text="Disable All Mods (metadata restore)",
+                         command=self.disable_mods, height=3, width=40)
         btn4.place(x=100, y=600)
         ToolTip(btn4, "Restores mdata.bin entries for all tracked mods and clears the ledger.")
+
+        # image preview
+        self.image_label = tk.Label(self.root, bg=self.LILAC, bd=1, relief="sunken")
+        self.image_label.place(x=1100, y=200, width=500, height=500)
+
+        self.prev_img_btn = tk.Button(self.root, text="<", command=self.show_prev_image, width=3)
+        self.prev_img_btn.place(x=1300, y=725)
+
+        self.next_img_btn = tk.Button(self.root, text=">", command=self.show_next_image, width=3)
+        self.next_img_btn.place(x=1370, y=725)
 
         self.mods_list = tk.Listbox(height=20, width=52)
         self.mods_list.place(x=700, y=200)
 
-    # I/O helpers
+        # helpers
+    def _sync_metadata_to_game(self) -> bool:
+        """
+        Copy the working mdata.bin (self.metadata_container) into the game's
+        mdata.bin location
+
+        Tries a couple of common layouts based on the current working directory:
+          <cwd>/media/data/etc/mdata.bin
+          <cwd>/data/etc/mdata.bin
+
+        Returns True if at least one copy succeeded, False otherwise
+        """
+        try:
+            src = self.metadata_container
+            if not os.path.exists(src):
+                return False
+
+            root = os.getcwd()
+            candidates = [
+                os.path.join(root, "media", "data", "etc", "mdata.bin"),
+                os.path.join(root, "data", "etc", "mdata.bin"),
+            ]
+
+            copied = False
+            for dst in candidates:
+                dst_dir = os.path.dirname(dst)
+                if os.path.isdir(dst_dir):
+                    shutil.copy2(src, dst)
+                    copied = True
+
+            return copied
+        except Exception:
+            return False
+
     def _write_padding(self, f, boundary=2048):
         current = f.tell()
         pad = (-current) % boundary
@@ -135,12 +185,45 @@ class ModManager():
             if pad:
                 f.write(b"\x00" * pad)
 
+    def _clear_images(self):
+        self.mod_images = []
+        self.current_image_index = 0
+        self.image_label.config(image="", text="No image", compound="center")
+
+    def _show_image(self):
+        if not self.mod_images:
+            self._clear_images()
+            self.prev_img_btn.config(state=tk.DISABLED)
+            self.next_img_btn.config(state=tk.DISABLED)
+            return
+        self.current_image_index %= len(self.mod_images)
+        img = self.mod_images[self.current_image_index]
+        self.image_label.config(image=img, text="", compound="center")
+        # Enable/disable arrows
+        if len(self.mod_images) <= 1:
+            self.prev_img_btn.config(state=tk.DISABLED)
+            self.next_img_btn.config(state=tk.DISABLED)
+        else:
+            self.prev_img_btn.config(state=tk.NORMAL)
+            self.next_img_btn.config(state=tk.NORMAL)
+
+    def show_next_image(self):
+        if not self.mod_images:
+            return
+        self.current_image_index = (self.current_image_index + 1) % len(self.mod_images)
+        self._show_image()
+
+    def show_prev_image(self):
+        if not self.mod_images:
+            return
+        self.current_image_index = (self.current_image_index - 1) % len(self.mod_images)
+        self._show_image()
 
     def _restore_entry_from_original(self, tail: int) -> bool:
         """
-        Copy the original 16-byte metadata chunk (base, unk1, size, unk2)
-        from self.original_metadata_container at `tail` into self.metadata_container.
-        Returns True on success, False if the original file is missing or invalid.
+        Copy the original 16 byte metadata chunk (base, unk1, size, unk2)
+        from self.original_metadata_container at `tail` into self.metadata_container
+        Returns True on success, False if the original file is missing or invalid
         """
         try:
             if not os.path.exists(self.original_metadata_container):
@@ -157,8 +240,77 @@ class ModManager():
         except Exception:
             return False
 
+    def _read_images_from_mod(self, f1):
+        """
+        Read image_count + size/offset table + image bytes from the file like f1
+        Leaves f1 positioned at the start of the payload
+
+        If the first byte after description looks like a legacy size byte (>3),
+        fall back to old format and leave f1 positioned so payload parsing still works
+        """
+        self._clear_images()
+
+        # position is directly after description bytes
+        start_after_desc = f1.tell()
+
+        count_byte = f1.read(1)
+        if not count_byte:
+            # no data, treat as legacy
+            f1.seek(start_after_desc)
+            return
+
+        image_count = int.from_bytes(count_byte, "little")
+
+        # Legacy mod (no image section): this byte is actually the first size byte
+        if image_count > 3:
+            # rewind to treat it as legacy
+            f1.seek(start_after_desc)
+            return
+
+        if image_count == 0:
+            # no images, payload starts right here
+            return
+
+        entries = []
+        for _ in range(image_count):
+            size = int.from_bytes(f1.read(4), "little")
+            offset = int.from_bytes(f1.read(4), "little")
+            entries.append((size, offset))
+
+        # Read images
+        imgs_bytes = []
+        for size, offset in entries:
+            f1.seek(offset)
+            data = f1.read(size)
+            if data:
+                imgs_bytes.append(data)
+
+        # Compute where payload starts: after last image
+        if entries:
+            last_size, last_offset = entries[-1]
+            payload_offset = last_offset + last_size
+            f1.seek(payload_offset)
+        else:
+            # shouldn't happen but to be safe
+            f1.seek(start_after_desc + 1 + 8 * image_count)
+
+        # Build PhotoImage objects from bytes (base64)
+        self.mod_images = []
+        for data in imgs_bytes:
+            try:
+                b64 = base64.b64encode(data)
+                img = tk.PhotoImage(data=b64)
+                self.mod_images.append(img)
+            except Exception:
+                # If Tk can't decode this image, skip it
+                continue
+
+        self.current_image_index = 0
+        self._show_image()
+
     # Reading mods
     def mod_reader(self):
+        """Handles mod file/package reading"""
         self.file_path = filedialog.askopenfilename(
             initialdir=os.getcwd(),
             title="Select a DW4 Hyper Mod file",
@@ -172,7 +324,7 @@ class ModManager():
             self.modname = filename
             self.mod_file.config(text=filename)
 
-            # If this mod is already enabled, don't load/apply again.
+            # If this mod is already enabled, don't load/apply again
             if self.is_mod_enabled(self.modname):
                 self.status_label.config(text=f"'{self.modname}' is already enabled. Disable it first to reapply.", fg="blue")
                 # select it in the listbox if present
@@ -211,6 +363,9 @@ class ModManager():
                 self.description.insert(tk.END, description)
                 self.description.config(state=tk.DISABLED)
 
+                # read image section
+                self._read_images_from_mod(f1)
+
                 # package vs single
                 is_package = self.file_path.lower().endswith(".dw4hp")
                 self.package_entries = []
@@ -240,7 +395,7 @@ class ModManager():
 
     # Tracking .MODS
     def _track_entry(self, mod_name: str, taildata: int, write_name: bool = True):
-        """Append one tracking record. If write_name=False, write a 0 name-len byte so readers inherit the last name."""
+        """Append one tracking record. If write_name=False, write a 0 name-len byte so readers inherit the last name"""
         # Read original values from mdata at taildata
         with open(self.metadata_container, "rb") as f:
             f.seek(taildata)
@@ -262,7 +417,7 @@ class ModManager():
 
     # Applying mods
     def mod_writer(self):
-        """Apply mod(s): 2048-align each write, update mdata per entry, refresh UI, clear temp state."""
+        """Apply mod(s): 2048-align each write, update mdata per entry, refresh UI, clear temp state"""
         
         try:
             # Prevent duplicate applies by NAME only (even if metadata already restored differently)
@@ -314,10 +469,23 @@ class ModManager():
             self.status_label.config(text=f"Error: {e}", fg="red")
             
         self._finalize_archive()
+        # Sync mdata.bin to the game's directory
+        sync_ok = self._sync_metadata_to_game()
+        if sync_ok:
+            self.status_label.config(
+                text="Mod(s) applied successfully and mdata.bin synced to game folder.",
+                fg="green"
+            )
+        else:
+            # Keep mods applied, but warn that the game-side mdata wasn't found
+            self.status_label.config(
+                text=f"Mod(s) applied, but game's mdata.bin directory (media\\data\\etc) not found in {os.getcwd()}. You'll need to \ncopy/paste mdata.bin manually.",
+                fg="red"
+            )
 
     # Ledger readers
     def _iter_mod_ledger(self, want_positions=False):
-        """Yield records from DW4_Hyper.MODS."""
+        """Yield records from DW4_Hyper.MODS"""
         if not os.path.exists(self.mods_enabled_file):
             return
         last_name = None
@@ -353,7 +521,7 @@ class ModManager():
 
     # Enabled checks
     def is_mod_enabled(self, mod_name: str) -> bool:
-        """True if the mod name exists in the ledger (name-only check)."""
+        """True if the mod name exists in the ledger (name-only check)"""
         try:
             target = (mod_name or "").strip().lower()
             if not target:
@@ -366,7 +534,7 @@ class ModManager():
             return False
 
     def check_if_applied(self, mod_name: str) -> bool:
-        """Return True if any record in the ledger resolves to mod_name (case-insensitive)."""
+        """Return True if any record in the ledger resolves to mod_name (case-insensitive)"""
         try:
             match = False
             for name, *_ in self._iter_mod_ledger():
@@ -383,7 +551,7 @@ class ModManager():
             return False
 
     def clean_mods(self, kept_bytes: bytes):
-        """Rewrite the ledger to an exact byte stream (kept_bytes), then refresh list."""
+        """Rewrite the ledger to an exact byte stream (kept_bytes), then refresh list"""
         try:
             with open(self.mods_enabled_file, "wb") as f1:
                 f1.write(kept_bytes)
@@ -448,7 +616,18 @@ class ModManager():
                 out.write(kept)
 
             if restored_any:
-                self.status_label.config(text=f"Disabled '{mod_name}' and restored original metadata.", fg="blue")
+                self.status_label.config(
+                    text=f"Disabled '{mod_name}' and restored original metadata.",
+                    fg="blue"
+                )
+                # Sync mdata.bin to the game's directory
+                sync_ok = self._sync_metadata_to_game()
+                if not sync_ok:
+                    self.status_label.config(
+                        text=self.status_label.cget("text") +
+                             f" Warning: game's mdata.bin directory (data\\etc) not found in {os.getcwd()}, you'll need to \ncopy/paste mdata.bin manually to media\\data\\etc",
+                        fg=self.status_label.cget("fg")
+                    )
             else:
                 self.status_label.config(text=f"'{mod_name}' not found in ledger.", fg="red")
 
@@ -476,13 +655,25 @@ class ModManager():
                 with open(self.main_container, "r+b") as f:
                     f.truncate(self.original_container_size)
 
-            # clear ledger
+                        # clear ledger
             open(self.mods_enabled_file, "wb").close()
             self.mods_list.delete(0, tk.END)
-            self.status_label.config(text="All mods disabled (mdata.bin & linkdata.bin restored to unmodded copies).", fg="blue")
+            self.status_label.config(
+                text="All mods disabled (mdata.bin & linkdata.bin restored to unmodded copies).",
+                fg="blue"
+            )
+
+            # Sync mdata.bin to the game's directory
+            sync_ok = self._sync_metadata_to_game()
+            if not sync_ok:
+                self.status_label.config(
+                    text=self.status_label.cget("text") +
+                         f" Warning: game's mdata.bin directory (data\\etc) not found in {os.getcwd()}, you'll need to \ncopy/paste mdata.bin manually to media\\data\\etc",
+                    fg=self.status_label.cget("fg")
+                )
+
         except Exception as e:
             self.status_label.config(text=f"Error: {e}", fg="red")
-
 
 # Runner
 def runner():

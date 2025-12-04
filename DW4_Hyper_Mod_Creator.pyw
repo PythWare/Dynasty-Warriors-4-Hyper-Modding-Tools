@@ -44,8 +44,8 @@ class ModCreator():
         self.authorname = tk.StringVar()
         self.version = tk.StringVar()
         self.mod_info = tk.StringVar()
+        self.image_paths = []  # up to 3 image paths
 
-        
         self.create_metadata_file()
         self.gui_labels()
         self.gui_entries()
@@ -76,16 +76,85 @@ class ModCreator():
     def gui_misc(self):
         self.status_label = self.lilac_label(self.root, text="", fg="green")
         self.status_label.place(x=10, y=500)
-        self.description = tk.Text(self.root, height = 20, width = 52)
+
+        self.description = tk.Text(self.root, height=20, width=52)
         self.description.place(x=110, y=200)
-        btn1 = tk.Button(self.root, text = "Create Mod", command = self.create_mod, height = 3, width = 20)
-        btn1.place(x=500,y=50)
-        btn2 = tk.Button(self.root, text = "Create Mod Package", command = self.create_package, height = 3, width = 20)
-        btn2.place(x=500,y=200)
+
+        btn1 = tk.Button(self.root, text="Create Mod", command=self.create_mod,
+                         height=3, width=20)
+        btn1.place(x=500, y=50)
+
+        btn2 = tk.Button(self.root, text="Create Mod Package", command=self.create_package,
+                         height=3, width=20)
+        btn2.place(x=500, y=200)
+
+        # image selection
+        btn_img = tk.Button(self.root, text="Select Images (0–3)",
+                            command=self.select_images, height=2, width=20)
+        btn_img.place(x=500, y=350)
+
+        self.images_label = self.lilac_label(self.root, text="No images selected.")
+        self.images_label.place(x=500, y=320)
 
         ToolTip(btn1, "This button creates a mod file from a file modded, used for single file mods.")
         ToolTip(btn2, "This button creates a package mod file for large mods, used for mods that mod more than 1 file.")
-            
+
+    def select_images(self):
+        paths = filedialog.askopenfilenames(
+            initialdir=os.getcwd(),
+            title="Select up to 3 preview images",
+            filetypes=[
+                ("Images", "*.png *.gif")
+            ]
+        )
+        if not paths:
+            return
+        # Hard limit to 3
+        self.image_paths = list(paths[:3])
+        self.images_label.config(
+            text=f"{len(self.image_paths)} image(s) selected."
+        )
+
+    def _write_image_section(self, f1):
+        """
+        Write image_count + size/offset table + image bytes
+        Offsets are absolute from start of file
+        """
+        images = []
+        for path in self.image_paths:
+            try:
+                with open(path, "rb") as imf:
+                    images.append(imf.read())
+            except Exception:
+                # If an image fails to read, just skip it
+                continue
+
+        image_count = min(len(images), 3)
+        # Write count byte
+        f1.write(image_count.to_bytes(1, "little"))
+
+        if image_count == 0:
+            return  # nothing more to do
+
+        # Currently just after the count byte
+        index_start = f1.tell()
+        # Each entry = size (4) + offset (4)
+        index_size = image_count * 8
+        base_data_offset = index_start + index_size
+
+        current_offset = base_data_offset
+
+        # Write table
+        for img in images[:image_count]:
+            size = len(img)
+            f1.write(size.to_bytes(4, "little"))
+            f1.write(current_offset.to_bytes(4, "little"))
+            current_offset += size
+
+        # Write image data
+        for img in images[:image_count]:
+            f1.write(img)
+       
     def create_mod(self):
         new_mod = self.modname.get() + self.extension
         self.file_path = filedialog.askopenfilename(
@@ -112,20 +181,27 @@ class ModCreator():
                 size = os.path.getsize(self.file_path) # size of mod file
                 # Write to new mod file
                 with open(new_mod, "wb") as f1, open(self.file_path, "rb") as original:
-                    f1.write(new_mod_raw_len.to_bytes(1, "little")) # write length of the mod's filename
-                    f1.write(new_mod_raw) # write mod file's name
-                    f1.write(file_count.to_bytes(4, "little"))  # files
-                    f1.write(author_len.to_bytes(1, "little")) # write author name length
-                    f1.write(author_name) # write author name
-                    f1.write(version_len.to_bytes(1, "little")) # write version length
-                    f1.write(version_number) # write version number
-                    f1.write(description_len.to_bytes(2, "little"))  # Write length
-                    f1.write(description_bytes)                      # Write description
-                    f1.write(size.to_bytes(4, "little"))             # write size
+                    # Header (unchanged)
+                    f1.write(new_mod_raw_len.to_bytes(1, "little"))
+                    f1.write(new_mod_raw)
+                    f1.write(file_count.to_bytes(4, "little"))
+                    f1.write(author_len.to_bytes(1, "little"))
+                    f1.write(author_name)
+                    f1.write(version_len.to_bytes(1, "little"))
+                    f1.write(version_number)
+                    f1.write(description_len.to_bytes(2, "little"))
+                    f1.write(description_bytes)
+
+                    # NEW: image section
+                    self._write_image_section(f1)
+
+                    # Payload (unchanged format)
+                    f1.write(size.to_bytes(4, "little"))
                     file_data = original.read()
                     f1.write(file_data)
                     
                 self.status_label.config(text=f"The Mod {new_mod} was created successfully!", fg="green")
+                self.image_paths.clear()
         except Exception as e:
             self.status_label.config(text=f"Error: {str(e)}", fg="red")
 
@@ -161,28 +237,32 @@ class ModCreator():
             description_len = len(description_bytes)
 
             with open(new_mod, "wb") as f1:
-                # package header
-                f1.write(new_mod_raw_len.to_bytes(1, "little")) # write length of the mod's filename
-                f1.write(new_mod_raw) # write mod file's name
-                f1.write(file_count)                          # files
-                f1.write(author_len.to_bytes(1, "little"))    # author len
-                f1.write(author_name)                         # author
-                f1.write(version_len.to_bytes(1, "little"))   # version len
-                f1.write(version_number)                      # version
-                f1.write(description_len.to_bytes(2, "little"))  # desc len
-                f1.write(description_bytes)                      # desc
+                # Header
+                f1.write(new_mod_raw_len.to_bytes(1, "little"))
+                f1.write(new_mod_raw)
+                f1.write(file_count)
+                f1.write(author_len.to_bytes(1, "little"))
+                f1.write(author_name)
+                f1.write(version_len.to_bytes(1, "little"))
+                f1.write(version_number)
+                f1.write(description_len.to_bytes(2, "little"))
+                f1.write(description_bytes)
 
-                # payload
+                # NEW: image section (applies to whole package)
+                self._write_image_section(f1)
+
+                # Payload (unchanged format)
                 for fname in files:
-                    full_path = os.path.join(package_path, fname)    
-                    size = os.path.getsize(full_path)                # size of mod file
-                    f1.write(size.to_bytes(4, "little"))             # write size
-                    with open(full_path, "rb") as original:          # read bytes only
+                    full_path = os.path.join(package_path, fname)
+                    size = os.path.getsize(full_path)
+                    f1.write(size.to_bytes(4, "little"))
+                    with open(full_path, "rb") as original:
                         f1.write(original.read())
 
             self.status_label.config(
                 text=f"The Mod Package {new_mod} was created successfully.", fg="green"
             )
+            self.image_paths.clear()
 
         except Exception as e:
             self.status_label.config(text=f"Error: {str(e)}", fg="red")
