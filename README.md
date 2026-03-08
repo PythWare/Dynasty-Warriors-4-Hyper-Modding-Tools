@@ -1,3 +1,9 @@
+# Update as of 3/7/2026
+
+I am going to redesign the tools for Dynasty Warriors 4 Hyper, new GUIs and code logic will be released in version 2.0. It's going to be as high end as Katsuki Engine and Aldnoah Engine, stay tuned.
+
+# Info
+
 Lightweight, GUI-first modding tools for Dynasty Warriors 4 Hyper (English version). Currently there are unpackers, repackers, a mod creator, mod manager to manage/apply mods. It's written in pure Python/Tkinter with minimal dependencies. Designed to be friendly for both modders and curious players. Mods can be any size, tools handle dynamic sizes (no “original size” constraint). It's important to read the guide section and Extra info & tips. Credit goes to Michael, Gamerman, and HighPriestFuneral for documentation/info on DW4 Hyper. If you encounter any issues or have questions, let me know on here or reddit (username on reddit is ThatFlowerGamu). If you own the Japanese/Chinese version of DW4 Hyper and would like the PD2 Unpacker/Repacker I made for the English version of DW4 Hyper supported for your versions then I can make a standalone version, just let me know.
 
 Tools included as of December 4 2025:
