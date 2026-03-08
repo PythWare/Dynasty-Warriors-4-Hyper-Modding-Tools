@@ -1,6 +1,25 @@
 # Update as of 3/7/2026
 
-I am going to redesign the tools for Dynasty Warriors 4 Hyper, new GUIs and code logic will be released in version 2.0. It's going to be as high end as Katsuki Engine and Aldnoah Engine, stay tuned.
+I am going to redesign the tools for Dynasty Warriors 4 Hyper, new GUI and code logic will be released in version 2.0. It's going to be as high end as Katsuki Engine and Aldnoah Engine, stay tuned.
+
+# Upcoming 2.0 Version
+
+While not ready to release yet, here are sneak peaks of 2.0 of DW4 Hyper Modding Tools.
+
+The new Mod Manager is meant to compete with the Constellation Mod Manager I created for Aldnoah Engine but reimagined for DW4 Hyper with a full ocean/fleet theme. Instead of a plain list based interface, mods are represented as ships on a navigable sea. Enabled mods dock in the Harbor, available mods sail in open Waters, and invalid or damaged mods sink into the Reef. Selecting a ship opens its manifest showing metadata, description, and preview images in a preview bay. The manager is not just a visual redesign, it now includes a scrollable/zoomable ocean, ship based mod selection, search and filtering, persistent mod library support through Mods_Folder, signature validation for proper DW4 Hyper mod formats, and clearer status handling for enabled, available, and invalid packages. It presents everything through a more premium high end interface designed to make managing DW4 Hyper mods feel like commanding a fleet rather than clicking through a utility.
+
+Mod Creator matches the Aquatic Mod Manager visually/functionally instead of being a basic utility window. Single file mods/package mods now have dedicated source selection controls, you can choose a single payload file in advance or choose a package folder ahead of time rather than doing everything through sudden popups during creation, mods no longer have to be written only to the current working folder, the creator now lets you choose and open a custom output folder for finished mod files, you can attach up to 3 preview images to a mod and the creator now has a Preview Bay so you can see how those images will look before building the mod, selected preview images are shown as thumbnails and you can cycle through them with previous/next controls, preview images are now handled with Pillow (Python imaging library) which allows cleaner scaling and better preview support, images are prepared in a way that works properly with the Aquatic Mod Manager’s fixed preview area, creator now writes proper signatures for mod files (this lets the Aquatic Mod Manager quickly detect valid mods and mark fake, invalid, or broken files as Reef/sunken ships instead of treating random renamed files like real mods), etc.
+
+<img width="1720" height="986" alt="o6" src="https://github.com/user-attachments/assets/78095b3e-f6ea-4069-8b60-a47aa996ce09" />
+<img width="1722" height="987" alt="o7" src="https://github.com/user-attachments/assets/5366d996-c6c3-4fe7-a5ff-bc99fce6459c" />
+<img width="1723" height="1011" alt="o2" src="https://github.com/user-attachments/assets/44afd946-f47b-4de0-bad2-71d0b31d3d6b" />
+<img width="1719" height="1009" alt="o3" src="https://github.com/user-attachments/assets/70d362e0-b241-4081-ae5f-0f18552d6f2b" />
+<img width="1720" height="1005" alt="o4" src="https://github.com/user-attachments/assets/d12de527-7c36-44b5-a629-b587a467b2a1" />
+<img width="1726" height="1012" alt="o5" src="https://github.com/user-attachments/assets/d3a576c0-7227-48bc-a049-ed11015e74ed" />
+<img width="1717" height="1006" alt="o8" src="https://github.com/user-attachments/assets/19619892-89d8-41ff-8391-0a9cd4856f2e" />
+<img width="1720" height="1013" alt="o9" src="https://github.com/user-attachments/assets/4e78e747-fd71-415b-95dc-67e84c011080" />
+<img width="1493" height="952" alt="o10" src="https://github.com/user-attachments/assets/422379db-5608-4eb1-8b63-f22d9a12a79d" />
+
 
 # Info
 
