@@ -75,7 +75,7 @@ class ModCreator():
     
     def gui_misc(self):
         self.status_label = self.lilac_label(self.root, text="", fg="green")
-        self.status_label.place(x=10, y=500)
+        self.status_label.place(x=10, y=540)
 
         self.description = tk.Text(self.root, height=20, width=40)
         self.description.place(x=110, y=200)
@@ -274,4 +274,5 @@ def runner():
     root.mainloop()
 if __name__ == "__main__":
     runner()
+
 
