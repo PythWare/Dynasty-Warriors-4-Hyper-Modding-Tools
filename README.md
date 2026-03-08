@@ -10,15 +10,18 @@ The new Mod Manager is meant to compete with the Constellation Mod Manager I cre
 
 Mod Creator matches the Aquatic Mod Manager visually/functionally instead of being a basic utility window. Single file mods/package mods now have dedicated source selection controls, you can choose a single payload file in advance or choose a package folder ahead of time rather than doing everything through sudden popups during creation, mods no longer have to be written only to the current working folder, the creator now lets you choose and open a custom output folder for finished mod files, you can attach up to 3 preview images to a mod and the creator now has a Preview Bay so you can see how those images will look before building the mod, selected preview images are shown as thumbnails and you can cycle through them with previous/next controls, preview images are now handled with Pillow (Python imaging library) which allows cleaner scaling and better preview support, images are prepared in a way that works properly with the Aquatic Mod Manager’s fixed preview area, creator now writes proper signatures for mod files (this lets the Aquatic Mod Manager quickly detect valid mods and mark fake, invalid, or broken files as Reef/sunken ships instead of treating random renamed files like real mods), etc.
 
-<img width="1720" height="986" alt="o6" src="https://github.com/user-attachments/assets/78095b3e-f6ea-4069-8b60-a47aa996ce09" />
-<img width="1722" height="987" alt="o7" src="https://github.com/user-attachments/assets/5366d996-c6c3-4fe7-a5ff-bc99fce6459c" />
-<img width="1723" height="1011" alt="o2" src="https://github.com/user-attachments/assets/44afd946-f47b-4de0-bad2-71d0b31d3d6b" />
-<img width="1719" height="1009" alt="o3" src="https://github.com/user-attachments/assets/70d362e0-b241-4081-ae5f-0f18552d6f2b" />
-<img width="1720" height="1005" alt="o4" src="https://github.com/user-attachments/assets/d12de527-7c36-44b5-a629-b587a467b2a1" />
-<img width="1726" height="1012" alt="o5" src="https://github.com/user-attachments/assets/d3a576c0-7227-48bc-a049-ed11015e74ed" />
-<img width="1717" height="1006" alt="o8" src="https://github.com/user-attachments/assets/19619892-89d8-41ff-8391-0a9cd4856f2e" />
-<img width="1720" height="1013" alt="o9" src="https://github.com/user-attachments/assets/4e78e747-fd71-415b-95dc-67e84c011080" />
-<img width="1493" height="952" alt="o10" src="https://github.com/user-attachments/assets/422379db-5608-4eb1-8b63-f22d9a12a79d" />
+Linkdata unpacker also got overhauled with new code, better performance, aquatic GUI, etc. Same will happen for other tools such as the resource_bin/bns unpackers though I may instead just make a central unpacker instead of having several unpacker scripts, still deciding.
+
+<img width="1718" height="955" alt="o6" src="https://github.com/user-attachments/assets/a326db4d-7f6f-4b1f-af9f-399dfee257a1" />
+<img width="1717" height="1008" alt="o7" src="https://github.com/user-attachments/assets/a908dce2-da06-4194-af93-1edd1a876fee" />
+<img width="1717" height="1017" alt="o2" src="https://github.com/user-attachments/assets/6eefd908-63df-4040-9952-4dd37bbb723c" />
+<img width="1716" height="1015" alt="o3" src="https://github.com/user-attachments/assets/1c7e58fa-e0df-4f6f-b215-ac30a2e54ced" />
+<img width="1723" height="1014" alt="o4" src="https://github.com/user-attachments/assets/5fa36a6f-1ea9-487d-846d-90b19d1f8306" />
+<img width="1722" height="995" alt="o5" src="https://github.com/user-attachments/assets/8b9bd9e7-3a51-48fa-bbd9-b31c6a17c8a9" />
+<img width="1719" height="975" alt="o8" src="https://github.com/user-attachments/assets/6d4b4d69-6897-4ead-a8a5-d2d1cf1bf283" />
+<img width="1493" height="952" alt="o10" src="https://github.com/user-attachments/assets/fc5d23fe-77ad-44b3-a69f-85978cec6f30" />
+<img width="1540" height="972" alt="o12" src="https://github.com/user-attachments/assets/686211bf-ced9-4b7b-874e-e9d6b1323a23" />
+<img width="1542" height="940" alt="o13" src="https://github.com/user-attachments/assets/26625559-b900-4931-af65-8af3eb345509" />
 
 
 # Info
