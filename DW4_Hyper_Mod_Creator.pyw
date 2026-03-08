@@ -77,7 +77,7 @@ class ModCreator():
         self.status_label = self.lilac_label(self.root, text="", fg="green")
         self.status_label.place(x=10, y=500)
 
-        self.description = tk.Text(self.root, height=20, width=52)
+        self.description = tk.Text(self.root, height=20, width=40)
         self.description.place(x=110, y=200)
 
         btn1 = tk.Button(self.root, text="Create Mod", command=self.create_mod,
@@ -274,3 +274,4 @@ def runner():
     root.mainloop()
 if __name__ == "__main__":
     runner()
+
