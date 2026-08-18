@@ -1,28 +1,6 @@
-# Update as of 3/7/2026
+# Update as of 8/18/2026
 
-I am going to redesign the tools for Dynasty Warriors 4 Hyper, new GUI and code logic will be released in version 2.0. It's going to be as high end as Katsuki Engine and Aldnoah Engine, stay tuned.
-
-# Upcoming 2.0 Version
-
-While not ready to release yet, here are sneak peaks of 2.0 of DW4 Hyper Modding Tools.
-
-The new Mod Manager is meant to compete with the Constellation Mod Manager I created for Aldnoah Engine but reimagined for DW4 Hyper with a full ocean/fleet theme. Instead of a plain list based interface, mods are represented as ships on a navigable sea. Enabled mods dock in the Harbor, available mods sail in open Waters, and invalid or damaged mods sink into the Reef. Selecting a ship opens its manifest showing metadata, description, and preview images in a preview bay. The manager is not just a visual redesign, it now includes a scrollable/zoomable ocean, ship based mod selection, search and filtering, persistent mod library support through Mods_Folder, signature validation for proper DW4 Hyper mod formats, and clearer status handling for enabled, available, and invalid packages. It presents everything through a more premium high end interface designed to make managing DW4 Hyper mods feel like commanding a fleet rather than clicking through a utility.
-
-Mod Creator matches the Aquatic Mod Manager visually/functionally instead of being a basic utility window. Single file mods/package mods now have dedicated source selection controls, you can choose a single payload file in advance or choose a package folder ahead of time rather than doing everything through sudden popups during creation, mods no longer have to be written only to the current working folder, the creator now lets you choose and open a custom output folder for finished mod files, you can attach up to 3 preview images to a mod and the creator now has a Preview Bay so you can see how those images will look before building the mod, selected preview images are shown as thumbnails and you can cycle through them with previous/next controls, preview images are now handled with Pillow (Python imaging library) which allows cleaner scaling and better preview support, images are prepared in a way that works properly with the Aquatic Mod Manager’s fixed preview area, creator now writes proper signatures for mod files (this lets the Aquatic Mod Manager quickly detect valid mods and mark fake, invalid, or broken files as Reef/sunken ships instead of treating random renamed files like real mods), etc.
-
-Linkdata unpacker also got overhauled with new code, better performance, aquatic GUI, etc. Same will happen for other tools such as the resource_bin/bns unpackers though I may instead just make a central unpacker instead of having several unpacker scripts, still deciding.
-
-<img width="1718" height="955" alt="o6" src="https://github.com/user-attachments/assets/a326db4d-7f6f-4b1f-af9f-399dfee257a1" />
-<img width="1717" height="1008" alt="o7" src="https://github.com/user-attachments/assets/a908dce2-da06-4194-af93-1edd1a876fee" />
-<img width="1717" height="1017" alt="o2" src="https://github.com/user-attachments/assets/6eefd908-63df-4040-9952-4dd37bbb723c" />
-<img width="1716" height="1015" alt="o3" src="https://github.com/user-attachments/assets/1c7e58fa-e0df-4f6f-b215-ac30a2e54ced" />
-<img width="1723" height="1014" alt="o4" src="https://github.com/user-attachments/assets/5fa36a6f-1ea9-487d-846d-90b19d1f8306" />
-<img width="1722" height="995" alt="o5" src="https://github.com/user-attachments/assets/8b9bd9e7-3a51-48fa-bbd9-b31c6a17c8a9" />
-<img width="1719" height="975" alt="o8" src="https://github.com/user-attachments/assets/6d4b4d69-6897-4ead-a8a5-d2d1cf1bf283" />
-<img width="1493" height="952" alt="o10" src="https://github.com/user-attachments/assets/fc5d23fe-77ad-44b3-a69f-85978cec6f30" />
-<img width="1540" height="972" alt="o12" src="https://github.com/user-attachments/assets/686211bf-ced9-4b7b-874e-e9d6b1323a23" />
-<img width="1542" height="940" alt="o13" src="https://github.com/user-attachments/assets/26625559-b900-4931-af65-8af3eb345509" />
-
+Dynasty Warriors 4 Hyper is going to become part of GokonSoftworks/Aldnoah Engine, this repository is now outdated. If you want to mod DW4 Hyper, rely on version 2.03 of Aldnoah Engine (now being called GokonSoftworks) https://github.com/PythWare/Aldnoah-Engine
 
 # Info
 
