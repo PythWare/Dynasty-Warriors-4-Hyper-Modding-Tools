@@ -1,6 +1,6 @@
 # Update as of 8/18/2026
 
-Dynasty Warriors 4 Hyper Modding Tools is going to become part of GokonSoftworks/Aldnoah Engine, this repository is now outdated. If you want to mod DW4 Hyper, rely on version 3.01 or newer of GokonSoftworks (formerly Aldnoah Engine) https://github.com/PythWare/Aldnoah-Engine
+Dynasty Warriors 4 Hyper Modding Tools is going to become part of GokonSoftworks/Aldnoah Engine, this repository is now outdated. If you want to mod DW4 Hyper, rely on version 3.01 or newer of GokonSoftworks (formerly Aldnoah Engine) https://github.com/PythWare/GokonSoftworks
 
 # Info
 
